@@ -10,18 +10,6 @@ use Symfony\Component\HttpFoundation\Response;
 class EventController extends  Controller
 {
 
-    /**
-     * @Route("/lucky/number")
-     * @throws \Exception
-     */
-    public function numberAction(): Response
-    {
-        $number = random_int(0, 100);
-
-        return new Response(
-            '<html><body>Lucky number: '.$number.'</body></html>'
-        );
-    }
 
     /**
      * @Route("/Event/", name="event_list", methods={"GET"})
