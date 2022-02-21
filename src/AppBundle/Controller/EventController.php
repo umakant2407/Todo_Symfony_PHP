@@ -9,9 +9,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class EventController extends  Controller
 {
-
-
+    
     /**
+     * Routing to get all Event
      * @Route("/Event/", name="event_list", methods={"GET"})
      */
     public function index(): \Symfony\Component\HttpFoundation\Response
