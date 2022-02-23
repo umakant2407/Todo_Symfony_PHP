@@ -1,50 +1,50 @@
 <?php
 
 namespace AppBundle\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\User;
+use AppBundle\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
-
+    /**
+     * @Route("/User/", name="index")
+     * @return Response
+     */
+    public function index(): Response
+    {
+        $path="signUp";
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user);
+        return $this->render('Registration/register.html.twig',['form'=>$form->createView(),'path'=>$path]);
+    }
 
     /**
-     * @Route("/", name="create_user", methods={"POST"})
+     * @Route("/User/create", name="signUp", methods={"POST"})
+     * @param Request $request
+     * @return Response
      */
     public function signUp(Request $request)
     {
-        $name = trim($request->request->get('name'));
-        $email_id = trim($request->request->get('email_id'));
-        $password = trim($request->request->get('password'));
-        $mobile_number = trim($request->request->get('mobile_number'));
-        $entityManager = $this->getDoctrine()->getManager();
+        $path="signUp";
         $user = new User();
-        $user->setEmailId($email_id);
-        $user->setPassword($password);
-        $user->setName($name);
-        $user->setMobileNumber($mobile_number);
-        $entityManager->persist($user);
-        $entityManager->flush();
-    }
-
-
-    /**
-     * @Route("/{email_id}{passawrd}", name="login_user", methods={"GET"})
-     */
-    public function login(Request $request)
-    {
-        $user= new User();
-        $email_id = trim($request->request->get('email_id'));
-        $password = trim($request->request->get('password'));
-        $entityManager = $this->getDoctrine()->getManager();
-        $user = $this->getDoctrine()->getRepository(User::class)->find($email_id);
-        $originalPassword=$user->getPassword();
-        if($password==$originalPassword){
-            return $user->getEvents();
-        }else{
-            return "Email Id or Password is incorrect";
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $password = $this->get('security.password_encoder')
+                ->encodePassword($user, $user->getPlainPassword());
+            $user->setPassword($password);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+            return $this->render('Registration/register.html.twig',array('form' => $form->createView(),'path'=>$path));
         }
+        return new Response('Not Saved new product with id '.$user->getEmailId());
     }
+
+
 }

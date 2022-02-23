@@ -1,28 +1,28 @@
 <?php
 
 namespace AppBundle\Entity;
-namespace AppBundle\Entity\Event;
-use AppBundle\Entity\User\Event;
+use AppBundle\Entity\Event;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+//use Symfony\Component\Validator\Constraints as Assert;
 
 /**
 * User
 *
  * @ORM\Table(name="user")
-* @ORM\Entity(repositoryClass="AppBundle/Repository/UserRepository")
-*/
+ * @ORM\Entity
+ */
 
-class User
+class User implements \Symfony\Component\Security\Core\User\UserInterface
 {
 
 
     /**
      * @var Event
      *
-     * @ORM\Column(name="events", type="Event")
-     * @ORM\OneToMany(targetEntity="App\Entity\Event", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Event", mappedBy="user")
      */
     private $events;
 
@@ -34,7 +34,7 @@ class User
     /**
      * @return ArrayCollection
      */
-    public function getEvents(): ArrayCollection
+    public function getEvents()
     {
         return $this->events;
     }
@@ -58,17 +58,14 @@ class User
 
     /**
      * @var string
-     *
      * @ORM\Column(name="email_id", type="string", length=255)
      */
-    private $email_id;
-
+    private $email_id ;
     /**
      * @var string
-     *
      * @ORM\Column(name="password", type="string", length=10)
      */
-    private $password;
+    private $password ;
 
     /**
      * @var string
@@ -110,9 +107,9 @@ class User
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getEmailId(): string
+    public function getEmailId()
     {
         return $this->email_id;
     }
@@ -128,7 +125,7 @@ class User
     /**
      * @return string
      */
-    public function getPassword(): string
+    public function getPassword()
     {
         return $this->password;
     }
@@ -144,7 +141,7 @@ class User
     /**
      * @return string
      */
-    public function getMobileNumber(): string
+    public function getMobileNumber()
     {
         return $this->mobile_number;
     }
@@ -157,4 +154,28 @@ class User
         $this->mobile_number = $mobile_number;
     }
 
+    public function getPlainPassword()
+    {
+        return $this->getPassword();
+    }
+
+    public function getRoles()
+    {
+        // TODO: Implement getRoles() method.
+    }
+
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    public function getUsername()
+    {
+        // TODO: Implement getUsername() method.
+    }
+
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
 }

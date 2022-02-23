@@ -1,0 +1,19 @@
+{% extends "base.html.twig" %}
+
+{% block body%}
+
+    <div class="container">
+        <?php
+        for($eventList as $event){
+
+        echo "<span class="d-block p-2 rounded-pill text-white">event->getTitle()</span>";
+        echo "<span class="d-block p-2 text-white">event->getDescription()</span>";
+        echo "<span class="d-block p-2 text-white">event->getStatus()</span>";
+        <br>
+
+        }
+        ?>
+    </div>
+
+
+{% endblock %}
