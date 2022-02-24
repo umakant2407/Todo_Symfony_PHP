@@ -31,13 +31,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
         $this->events = new ArrayCollection();
     }
 
-    /**
-     * @return ArrayCollection
-     */
-    public function getEvents()
-    {
-        return $this->events;
-    }
+
 
 
     /**
@@ -90,6 +84,15 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
         $this->id = $id;
     }
 
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getEvents()
+    {
+        return $this->events;
+    }
+
     /**
      * @return string
      */
@@ -137,6 +140,8 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     {
         $this->password = $password;
     }
+
+
 
     /**
      * @return string

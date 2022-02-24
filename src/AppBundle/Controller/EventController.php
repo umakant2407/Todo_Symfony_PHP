@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 use AppBundle\Entity\User;
 use AppBundle\Form\EventType;
+use AppBundle\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -16,87 +17,88 @@ class EventController extends  Controller
 
     /**
      * Routing to get all Event
-     * @Route("/Event/", name="Event")
+     * @Route("User/{userId}/Event", name="Event", Methods={"GET"})
      * @return Response
      */
-    public function eventAction(): Response
+    public function eventAction(int $userId): Response
     {
         $path="create_event";
         $event=new  Event();
         $form = $this->createForm(EventType::class,$event);
-        return $this->render('Event/event.html.twig',['form'=>$form->createView(),'path'=>$path]);
+        return $this->render('Event/createEvent.html.twig',['form'=>$form->createView(),'path'=>$path,'userId'=>$userId]);
 
     }
 
     /**
-     * @Route("/Event/create", name="create_event", methods={"POST"})
+     * @Route("/User/{userId}/Event", name="create_event", methods={"POST"})
      */
-    public function create(Request $request)
+    public function create(Request $request,int $userId)
     {
+//        $userRepository=new UserRepository();
         $path="create_event";
         $event =new Event();
-        $event->setId(1);
         $form = $this->createForm(EventType::class,$event);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() ) {
             $entityManager = $this->getDoctrine()->getManager();
             $repository = $entityManager->getRepository(User::class);
-            $id=1;
-            $user=$repository->findOneBy(array('id' => $id ));
+            $user=$repository->findOneBy(array('id' => $userId ));
             $event->setUser($user);
             $entityManager->persist($event);
             $entityManager->flush();
-            return $this->render('Event/event.html.twig',['form'=>$form->createView(),'path'=>$path]);
+            return $this->redirectToRoute('displayEvent',['userId' => $userId]);
         }
-        return new Response('Not Saved new Event with id '.$event->getTitle());
+        return new Response('Not Saved new Event with Title '.$event->getTitle());
 
     }
 
     /**
-     * @Route("/Event/Update", name="updateAction")
+     * @Route("/User/{userId}/Event/Update/{eventId}", name="updateAction", methods={"GET"})
      */
-    public function updateAction()
+    public function updateAction(int $eventId,int $userId)
     {
-        echo "Change your Status";
         $path="update";
-        $event=new  Event();
+        $entityManager = $this->getDoctrine()->getManager();
+        $repository = $entityManager->getRepository(Event::class);
+        $event = $repository->findOneBy(array('id' => $eventId));
         $form = $this->createForm(EventType::class,$event);
-        return $this->render('Event/event.html.twig',['form'=>$form->createView(),'path'=>$path]);
+        return $this->render('Event/updateEvent.html.twig',['form'=>$form->createView(),'path'=>$path,'eventId'=>$eventId,'userId'=>$userId]);
     }
 
     /**
-     * @Route("/Event/Update/", name="update", methods={"POST"})
+     * @Route("/User/{userId}/Event/Update/{eventId}", name="update", methods={"POST"})
      */
-    public function update(Request $request)
+    public function update(Request $request,int $eventId,int $userId)
     {
         $path="update";
         $event =new Event();
         $form = $this->createForm(EventType::class,$event);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
             $title=$form->get('title')->getData();
             $description=$form->get('description')->getData();
             $status=$form->get('status')->getData();
             $entityManager = $this->getDoctrine()->getManager();
             $repository = $entityManager->getRepository(Event::class);
-            $event = $repository->findOneBy(array('title' => $title, 'description' => $description));
+            $event = $repository->findOneBy(array('id' => $eventId));
             $event->setStatus($status);
+            $event->setTitle($title);
+            $event->setDescription($description);
             $entityManager->persist($event);
             $entityManager->flush();
-            echo "Status got updated\n Create another Event";
+            return $this->redirectToRoute('displayEvent',['userId' => $userId]);
         }
-        return $this->render('Event/event.html.twig',['form'=>$form->createView(),'path'=>$path]);
     }
 
     /**
-     * @Route("/Event/{id}", name="displayAction")
+     * @Route("/User/{userId}", name="displayEvent", methods={"GET"})
      */
-    public function displayAction(int $id){
+    public function displayEvent(int $userId){
         $eventList=new ArrayCollection();
         $entityManager = $this->getDoctrine()->getManager();
         $repository = $entityManager->getRepository(Event::class);
-        $eventList = $repository->findAll(array('User_id' => $id));
-        return $this->render('Event/eventDisplay.html.twig',['eventList'=>$eventList]);
+        $eventList = $repository->findBy(array('user' => $userId));
+        return $this->render('Event/eventDisplay.html.twig',['eventList'=>$eventList,'userId'=>$userId]);
     }
 
 

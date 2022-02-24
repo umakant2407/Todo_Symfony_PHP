@@ -2,11 +2,42 @@
 {% extends "base.html.twig" %}
 
 {% block body%}
+<div class="container align-middle" margin:centre>
+    <h4>Create New User</h4>
 <form action="{{ url(path) }}" method="POST" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
     <input type="submit" />
 </form>
 {{ form_end(form) }}
+</div>
+
+{#    <div class="container align-middle" margin:centre>#}
+{#        <table class="table">#}
+{#            <thead class="thead-dark">#}
+{#            <tr>#}
+{#                <th scope="col"><h3>Create A New Event</h3></th>#}
+{#            </tr>#}
+{#            </thead>#}
+{#            <form action="{{ url(path) }}" method="POST" {{ form_enctype(form) }}>#}
+{#                <tbody>#}
+{#                <th scope="col"><div class="mr-auto p-2">  {{ form_row(form.name) }} </div></th>#}
+{#                </tbody>#}
+{#                <tbody>#}
+{#                <th scope="col"><div class="mr-auto p-2"> {{ form_row(form.email_id) }} </div></th>#}
+{#                </tbody>#}
+{#                <tbody>#}
+{#                <th scope="col"><div class="mr-auto p-2"> {{ form_row(form.mobile_number) }} </div></th>#}
+{#                </tbody>#}
+{#                <th scope="col"><div class="mr-auto p-2"> {{ form_row(form.password) }} </div></th>#}
+{#                </tbody>#}
+{#                <tbody>#}
+{#                <th scope="col"><div class="mr-auto p-2"><input type="Submit" /> </div></th>#}
+{#                </tbody>#}
+{#            </form>#}
+{#        </table>#}
+{#    </div>#}
+
+
 {% endblock %}
 
 

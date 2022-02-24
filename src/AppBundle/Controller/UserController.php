@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 class UserController extends Controller
 {
     /**
-     * @Route("/User/", name="index")
+     * @Route("/Register/", name="index", methods={"GET"})
      * @return Response
      */
     public function index(): Response
@@ -24,7 +24,7 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/User/create", name="signUp", methods={"POST"})
+     * @Route("/Register", name="signUp", methods={"POST"})
      * @param Request $request
      * @return Response
      */
@@ -34,16 +34,18 @@ class UserController extends Controller
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() ) {
             $password = $this->get('security.password_encoder')
                 ->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($password);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
-            return $this->render('Registration/register.html.twig',array('form' => $form->createView(),'path'=>$path));
+            $userId=$user->getId();
+            return $this->redirectToRoute('displayEvent',['userId' => $userId]);
         }
-        return new Response('Not Saved new product with id '.$user->getEmailId());
+        echo "Please Try again";
+        return $this->redirectToRoute('start');
     }
 
 

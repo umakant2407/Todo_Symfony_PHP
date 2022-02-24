@@ -1,23 +1,37 @@
 <?php
 
 namespace AppBundle\Manager;
-
-use AppBundle\Entity\User\Event;
+use AppBundle\Entity\User;
+use Doctrine\ORM\EntityManager as Doctrine;
+use AppBundle\Entity\Event;
 use AppBundle\Repository\EventRepository;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+
+/**
+ * Event Manager
+ */
 class EventManager
 {
-    private $eventRepository ;
+    /**
+     * @var EntityManager
+     */
+    private $em ;
+    /**
+     * @var Doctrine
+     */
+    private $doctrine;
 
     /**
      * Constructor
-     * @param EventRepository   $eventRepository   - Event Repository
+     * @param Doctrine                 $doctrine        - Doctrine
      */
-    public function __construct(EventRepository $eventRepository){
-        $this->eventRepository = $eventRepository;
+    public function __construct(Doctrine $doctrine){
+        $this->doctrine = $doctrine;
+        $this->em = $this->doctrine->getManager();
     }
 
 
@@ -28,22 +42,14 @@ class EventManager
     }
 
 
-    public function createEvent(Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function createEvent(int $userId,Event $event)
     {
+        $repository = $this->em->getRepository(User::class);
+        $user=$repository->findOneBy(array('id' => $userId ));
+        $event->setUser($user);
+        $this->em->persist($event);
+        $this->em->flush();
 
-        $title = trim($request->request->get('title'));
-        $description = trim($request->request->get('description'));
-        $status = trim($request->request->get('status'));
-        if (empty($title))
-            return $this->eventRepository->redirectToRoute('DisplayAll');
-        $entityManager = $this->eventRepository->getDoctrine()->getManager();
-        $event = new Event();
-        $event->setTitle($title);
-        $event->setDescription($description);
-        $event->setStatus($status);
-        $entityManager->persist($event);
-        $entityManager->flush();
-        return $this->eventRepository->redirectToRoute('DisplayAll');
     }
 
 

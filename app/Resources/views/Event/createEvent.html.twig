@@ -1,0 +1,45 @@
+
+{% extends "base.html.twig" %}
+
+{% block body%}
+
+        <div class="container align-middle">
+            <h3>Create A New Event</h3>
+            <form action="{{ url(path,{ 'userId': userId }) }}" method="POST" {{ form_enctype(form) }}>
+                <div class="mr-auto p-2">  {{ form_row(form.title,      { 'label': 'Title Of Event:-' }) }} </div>
+                <div class="mr-auto p-2"> {{ form_row(form.description, { 'label': 'EventDescription:-' }) }} </div>
+                <div class="mr-auto p-2"> {{ form_row(form.status,      { 'label': 'Status Of Event:-' }) }} </div>
+                <div class="mr-auto p-2"><input type="Submit" /> </div>
+            </form>
+        </div>
+{##}
+
+{#    <div class="container align-middle" margin:centre>#}
+{#    <table class="table">#}
+{#        <thead class="thead-dark">#}
+{#        <tr>#}
+{#            <th scope="col"><h3>Create A New Event</h3></th>#}
+{#        </tr>#}
+{#        </thead>#}
+{#        <form action="{{ url(path,{ 'userId': userId }) }}" method="POST" {{ form_enctype(form) }}>#}
+{#            <tbody>#}
+{#            <th scope="col"><div class="mr-auto p-2">  {{ form_row(form.title,      { 'label': 'Title Of Event:-' }) }} </div></th>#}
+{#            </tbody>#}
+{#            <tbody>#}
+{#            <th scope="col"><div class="mr-auto p-2"> {{ form_row(form.description, { 'label': 'EventDescription:-' }) }} </div></th>#}
+{#            </tbody>#}
+{#            <tbody>#}
+{#            <th scope="col"><div class="mr-auto p-2"> {{ form_row(form.status,      { 'label': 'Status Of Event:-' }) }} </div></th>#}
+{#            </tbody>#}
+{#            <tbody>#}
+{#            <th scope="col"><div class="mr-auto p-2"><input type="Submit" /> </div></th>#}
+{#            </tbody>#}
+{#        </form>#}
+{#    </table>#}
+{#    </div>#}
+
+
+
+
+{{ form_end(form) }}
+{% endblock %}

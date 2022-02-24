@@ -3,17 +3,32 @@
 {% block body%}
 
     <div class="container">
-        <?php
-        for($eventList as $event){
-
-        echo "<span class="d-block p-2 rounded-pill text-white">event->getTitle()</span>";
-        echo "<span class="d-block p-2 text-white">event->getDescription()</span>";
-        echo "<span class="d-block p-2 text-white">event->getStatus()</span>";
-        <br>
-
-        }
-        ?>
+        <h3>List Of Events</h3>
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Description</th>
+                <th scope="col">Status</th>
+                <th scope="col">Link To Update</th>
+            </tr>
+            </thead>
+            {% for event in eventList %}
+            <tbody>
+                <th scope="col">{{ event.title }}</th>
+                <th scope="col">{{ event.description }}</th>
+                <th scope="col">{{ event.status }}</th>
+                <th scope="col"><a href="{{ path('updateAction' ,{'eventId': event.id ,'userId':userId}) }}">Update</a></th>
+            </tbody>
+            {% endfor %}
+        </table>
     </div>
+    <br>
+    <div class="container">
 
+    <h4><a href="{{ path('Event' ,{'userId':userId})}}">Create New Event</a></h4>
 
+    </div>
+    {% block javascripts %}
+    {% endblock %}
 {% endblock %}

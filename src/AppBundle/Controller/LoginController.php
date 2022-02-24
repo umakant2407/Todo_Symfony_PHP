@@ -12,7 +12,7 @@ class LoginController extends Controller
 {
 
     /**
-     * @Route("/start", name="start")
+     * @Route("/Login", name="start" ,methods={"GET"})
      * @return Response
      */
     public function startAction(): Response
@@ -34,7 +34,7 @@ class LoginController extends Controller
 
 
     /**
-     * @Route("/login", name="login")
+     * @Route("/Login", name="login", methods={"POST"})
      */
     public function loginAction(Request $request)
     {
@@ -49,11 +49,11 @@ class LoginController extends Controller
             $user = $repository->findOneBy(array('email_id' => $email_id, 'password' => $password));
             if (!$user) {
                 echo "Email-id is not Registered Please SignUp";
+                return $this->redirectToRoute('start');
+            }else{
+                $userId=$user->getId();
+                return $this->redirectToRoute('displayEvent',['userId' => $userId]);
             }
-            return $this->render('security/login.html.twig', array(
-                'last_username' => $lastUsername,
-                'error' => $error,
-            ));
         }
     }
 }
