@@ -19,7 +19,7 @@
                 <th scope="col"><h3>Upadte Event</h3></th>
             </tr>
             </thead>
-            <form action="{{ url(path,{ 'userId': userId,'eventId': eventId }) }}" method="POST" {{ form_enctype(form) }}>
+            <form action="{{ url(path,{ 'eventId': eventId }) }}" method="POST" {{ form_enctype(form) }}>
                 <tbody>
                 <th scope="col"><div class="mr-auto p-2">  {{ form_row(form.title,      { 'label': 'Title Of Event::-' }) }} </div></th>
                 </tbody>

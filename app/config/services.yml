@@ -4,6 +4,13 @@ parameters:
 #    parameter_name: value
 
 services:
-#    service_name:
-#        class: AppBundle\Directory\ClassName
-#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+    app.event_manager:
+        class: AppBundle\Manager\EventManager
+        arguments:
+            - '@doctrine'
+    app.user_manager:
+        class: AppBundle\Manager\UserManager
+        arguments:
+            - '@doctrine'
+    logout_listener:
+        class: AppBundle\LogoutListener\onLogoutSuccess

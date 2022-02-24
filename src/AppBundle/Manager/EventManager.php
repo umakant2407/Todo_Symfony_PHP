@@ -2,13 +2,9 @@
 
 namespace AppBundle\Manager;
 use AppBundle\Entity\User;
-use Doctrine\ORM\EntityManager as Doctrine;
+use Doctrine\Common\Persistence\ManagerRegistry as Doctrine;
 use AppBundle\Entity\Event;
-use AppBundle\Repository\EventRepository;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\Form;
 
 
 /**
@@ -16,51 +12,48 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class EventManager
 {
-    /**
-     * @var EntityManager
-     */
     private $em ;
-    /**
-     * @var Doctrine
-     */
     private $doctrine;
-
+    private $eventRepository;
+    private $userRepository;
     /**
      * Constructor
-     * @param Doctrine                 $doctrine        - Doctrine
+     * @param Doctrine         $doctrine        - Doctrine
      */
     public function __construct(Doctrine $doctrine){
         $this->doctrine = $doctrine;
         $this->em = $this->doctrine->getManager();
+        $this->userRepository = $this->em->getRepository(User::class);
+        $this->eventRepository = $this->em->getRepository(Event::class);
     }
 
-
-    public function DisplayAll($eventRepository): Event
+    public function createEvent(Event $event)
     {
-        return $this->$eventRepository->getDoctrine()->getRepository(Event::class)->findBy([], ['id' => 'DESC']);
-
-    }
-
-
-    public function createEvent(int $userId,Event $event)
-    {
-        $repository = $this->em->getRepository(User::class);
-        $user=$repository->findOneBy(array('id' => $userId ));
+        $user= $this->userRepository->findOneBy(array('id' => $_SESSION["userId"] ));
         $event->setUser($user);
         $this->em->persist($event);
         $this->em->flush();
-
     }
 
+    public function updateStatusHelper(int $eventId){
+        return $event = $this->eventRepository->findOneBy(array('id' => $eventId));
+    }
 
-    public function updateStatus(Request $request,EntityManagerInterface $em){
-        $event=new Event();
-        $id = trim($request->request->get('id'));
-        $entityManager = $this->eventRepository->getDoctrine()->getManager();
-        $event = $this->eventRepository->getDoctrine()->getRepository(Event::class)->find($id);
+    public function updateStatus(Form $form,int $eventId){
+        $title=$form->get('title')->getData();
+        $description=$form->get('description')->getData();
+        $status=$form->get('status')->getData();
+        $event = $this->eventRepository->findOneBy(array('id' => $eventId));
+        $event->setStatus($status);
+        $event->setTitle($title);
+        $event->setDescription($description);
+        $this->em->persist($event);
+        $this->em->flush();
+    }
 
-        $event->setStatus( ! $event->getStatus());
-        $entityManager->flush();
-        return $this->eventRepository->redirectToRoute('event_list');
+    public function displayAll()
+    {
+        return $this->eventRepository->findBy(array('user' => $_SESSION["userId"]));
+
     }
 }

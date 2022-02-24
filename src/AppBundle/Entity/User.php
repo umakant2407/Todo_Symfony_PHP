@@ -6,13 +6,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
-//use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
 * User
 *
  * @ORM\Table(name="user")
  * @ORM\Entity
+ * @UniqueEntity(
+ *     fields={"email_id"},
+ *     errorPath="email_id",
+ *     message="This email_id is already in registred."
+ * )
  */
 
 class User implements \Symfony\Component\Security\Core\User\UserInterface
@@ -26,12 +31,12 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      */
     private $events;
 
+
+
     public function __construct()
     {
         $this->events = new ArrayCollection();
     }
-
-
 
 
     /**
@@ -45,25 +50,28 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
     /**
      * @var string
-     * @ORM\Column(name="email_id", type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Email
+     * @ORM\Column(name="email_id", type="string", length=255 ,unique=true)
      */
     private $email_id ;
     /**
      * @var string
+     * @Assert\NotBlank
      * @ORM\Column(name="password", type="string", length=10)
      */
     private $password ;
 
     /**
      * @var string
-     *
+     *@Assert\NotBlank
      * @ORM\Column(name="mobile_number", type="string", length=10)
      */
     private $mobile_number;

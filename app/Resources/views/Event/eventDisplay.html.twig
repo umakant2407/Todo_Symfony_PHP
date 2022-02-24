@@ -18,7 +18,7 @@
                 <th scope="col">{{ event.title }}</th>
                 <th scope="col">{{ event.description }}</th>
                 <th scope="col">{{ event.status }}</th>
-                <th scope="col"><a href="{{ path('updateAction' ,{'eventId': event.id ,'userId':userId}) }}">Update</a></th>
+                <th scope="col"><a href="{{ path('updateAction' ,{'eventId': event.id }) }}">Update</a></th>
             </tbody>
             {% endfor %}
         </table>
@@ -26,7 +26,7 @@
     <br>
     <div class="container">
 
-    <h4><a href="{{ path('Event' ,{'userId':userId})}}">Create New Event</a></h4>
+    <h4><a href="{{ path('create_event' )}}">Create New Event</a></h4>
 
     </div>
     {% block javascripts %}

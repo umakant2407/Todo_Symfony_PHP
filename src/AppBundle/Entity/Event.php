@@ -10,13 +10,15 @@ namespace AppBundle\Entity;
 
 use AppBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 class Event
 {
 
 
     /**
      * @var User
-     *
+     * @Assert\NotBlank
      * @ORM\ManyToOne(targetEntity="User", inversedBy="events")
      * @ORM\JoinColumn(name="User_id", referencedColumnName="id")
      */
@@ -45,7 +47,7 @@ class Event
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank
      * @ORM\Column(name="title", type="string", length=255)
      */
     private $title;

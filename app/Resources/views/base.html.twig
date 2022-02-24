@@ -12,7 +12,33 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 </head>
 <body>
-{% block body %}{% endblock %}
+    <header class="p-3 bg-dark text-white">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+
+
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <button type="submit" formaction="/Register" class="btn btn-outline-light me-2"> <a href="/User" class="d-flex align-items-center mb-1 mb-lg-0 text-white text-decoration-none">
+                            TODO APP
+                        </a> </button>
+                </ul>
+
+                <div class="text-end">
+                    <button type="submit" formaction="/Register" class="btn btn-outline-light me-2"> <a href="/Register" class="d-flex align-items-center mb-1 mb-lg-0 text-white text-decoration-none">
+                            Register
+                        </a> </button>
+                    <button type="submit" formaction="/login" class="btn btn-outline-light me-2"> <a href="/login" class="d-flex align-items-center mb-1 mb-lg-0 text-white text-decoration-none">
+                            Login
+                        </a> </button>
+                    <button type="submit" formaction="/logout" class="btn btn-outline-light me-2"> <a href="/logout" class="d-flex align-items-center mb-1 mb-lg-0 text-white text-decoration-none">
+                            Logout
+                        </a> </button>
+                </div>
+            </div>
+        </div>
+    </header>
+{% block body %}
+{% endblock %}
 {% block javascripts %}
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>

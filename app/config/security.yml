@@ -5,10 +5,19 @@ security:
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
         in_memory:
-            memory: ~
+            memory:
+                users:
+                    umakant:
+                        password: umakant
+                        roles: 'ROLE_USER'
+
+                    faruk:
+                        password: umakant
+                        roles: 'ROLE_ADMIN'
 
     encoders:
         AppBundle\Entity\User: plaintext
+        Symfony\Component\Security\Core\User\User: plaintext
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -20,10 +29,22 @@ security:
             anonymous: ~
             # activate different ways to authenticate
 
-            # http_basic: ~
+            http_basic: ~
             # http://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
 
 #             form_login:
 #                 login_path: login
 #                 check_path: login
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+#        secured_area:
+#            # ...
+            logout:
+                path: /logout
+                target: /
+    access_control:
+    - { path: ^/Login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/Register, roles: IS_AUTHENTICATED_ANONYMOUSLY ,methods: [GET]}
+    - { path: ^/Register, roles: IS_AUTHENTICATED_FULLY ,methods: [POST]}
+    - { path: ^/User/(?P<digit>\d+)/Event/Update/   , roles: IS_AUTHENTICATED_FULLY  }
+    - { path: ^/User/  , roles: IS_AUTHENTICATED_FULLY  }
+    - { path: ^/User/(?P<digit>\d+)/Event   , roles: IS_AUTHENTICATED_FULLY  }

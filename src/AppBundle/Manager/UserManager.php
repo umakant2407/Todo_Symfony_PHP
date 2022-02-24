@@ -1,62 +1,43 @@
 <?php
-//
-//namespace AppBundle\Manager;
-//use AppBundle\Entity\User;
-//use AppBundle\Repository\UserRepository;
-//use Symfony\Component\Form\Form;
-//use Symfony\Component\HttpFoundation\Request;
-//use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-//
-//class UserManager
-//{
-//
-//    private $userRepository ;
-//
-//    /**
-//     * Constructor
-//     * @param UserRepository   $userRepository   - User Repository
-//     */
-//    public function __construct(UserRepository $userRepository){
-//        $this->userRepository = $userRepository;
-//    }
-//
-//    public function addUser(Form $form, User $user,UserPasswordEncoderInterface $passwordEncoder){
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//
-//            $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
-//            $user->setPassword($password);
-//
-//
-//            $entityManager = $this->userRepository->getDoctrine()->getManager();
-//            $entityManager->persist($user);
-//            $entityManager->flush();
-//
-//            return $this->userRepository->redirectToRoute('replace_with_some_route');
-//        }
-//
-//        return $this->userRepository->render(
-//            'registration/register.html.twig',
-//            array('form' => $form->createView())
-//        );
-//    }
-//
-//
-//    public function loginUser(Request $request){
-//
-//        $user= new User();
-//        $email_id = trim($request->request->get('email_id'));
-//        $password = trim($request->request->get('password'));
-//        $entityManager = $this->userRepository->getDoctrine()->getManager();
-//        $user = $this->userRepository->getDoctrine()->getRepository(User::class)->find($email_id);
-//        $originalPassword=$user->getPassword();
-//        if($password==$originalPassword){
-//            return $user->getEvents();
-//        }else{
-//            return "Email Id or Password is incorrect";
-//        }
-//
-////    }
-//
-//
-//}
+
+namespace AppBundle\Manager;
+use AppBundle\Entity\Event;
+use AppBundle\Entity\User;
+use Doctrine\Common\Persistence\ManagerRegistry as Doctrine;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Request;
+
+/**
+ * Event Manager
+ */
+class UserManager
+{
+
+    private $em ;
+    private $doctrine;
+    private $eventRepository;
+    private $userRepository;
+    /**
+     * Constructor
+     * @param Doctrine         $doctrine        - Doctrine
+     */
+    public function __construct(Doctrine $doctrine){
+        $this->doctrine = $doctrine;
+        $this->em = $this->doctrine->getManager();
+        $this->userRepository = $this->em->getRepository(User::class);
+        $this->eventRepository = $this->em->getRepository(Event::class);
+    }
+
+    public function addUser( string $password,User $user){
+        $user->setPassword($password);
+        $this->em->persist($user);
+        $this->em->flush();
+    }
+
+
+    public function loginUser(string $email_id,string $password){
+        return $this->userRepository->findOneBy(array('email_id'=>$email_id));
+    }
+
+
+}

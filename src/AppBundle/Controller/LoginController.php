@@ -7,53 +7,40 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class LoginController extends Controller
 {
 
-    /**
-     * @Route("/Login", name="start" ,methods={"GET"})
-     * @return Response
-     */
-    public function startAction(): Response
-    {
-        $authenticationUtils = $this->get('security.authentication_utils');
 
-        // get the login error if there is one
-        $error = $authenticationUtils->getLastAuthenticationError();
-
-        // last username entered by the user
-        $lastUsername = $authenticationUtils->getLastUsername();
-
-        return $this->render('security/login.html.twig', array(
-            'last_username' => $lastUsername,
-            'error'         => $error,
-        ));
-    }
-
+    private $userManager;
 
 
     /**
-     * @Route("/Login", name="login", methods={"POST"})
+     * @Route("/login", name="login", methods={"GET|POST"})
      */
     public function loginAction(Request $request)
     {
         $authenticationUtils = $this->get('security.authentication_utils');
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
-        if($request->getMethod()=="POST") {
+        if($request->getMethod()=="POST" ) {
             $email_id = $request->get('email_id');
             $password = $request->get('password');
-            $entityManager = $this->getDoctrine()->getManager();
-            $repository = $entityManager->getRepository(User::class);
-            $user = $repository->findOneBy(array('email_id' => $email_id, 'password' => $password));
-            if (!$user) {
-                echo "Email-id is not Registered Please SignUp";
-                return $this->redirectToRoute('start');
+            $this->userManager = $this->container->get('app.user_manager');
+            $user = $this->userManager->loginUser($email_id,$password);
+            if ($user->getPassword()==$password) {
+                session_destroy();
+                session_start();
+                $_SESSION["userId"]=$user->getId();
+                return $this->redirectToRoute('displayEvent');
             }else{
-                $userId=$user->getId();
-                return $this->redirectToRoute('displayEvent',['userId' => $userId]);
+                echo "Email-id or Password is Wrong";
             }
         }
+        return $this->render('security/login.html.twig', array(
+            'last_username' => $lastUsername,
+            'error'         => $error,
+        ));
     }
 }

@@ -1,22 +1,23 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div id="wrapper" class="d-flex align-items-md-centerr">
+    <div style="
+    display: inline-block;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 200px;
+    height: 100px;
+    margin: auto;">
         <div id="container ">
-            <div id="welcome">
-                <h4> Welcome to TODO Application</h4>
-            </div>
-            <form action="/Login">
-
-                <button type="submit"  class="btn btn-secondary btn-lg btn-block">Login</button>
-
-            </form>
-            <br>
-            <form action="/Register">
-
-                <button type="submit" class="btn btn-secondary btn-lg btn-block" >Sign UP</button>
-
-            </form>
+            <button type="submit"  class="btn btn-outline-dark me-2"> <a href="/login" class="d-flex align-items-center mb-1 mb-lg-0 text-black text-decoration-none">
+                   Login
+                </a> </button>
+            <button type="submit"  class="btn btn-outline-dark me-2"> <a href="/Register" class="d-flex align-items-center mb-1 mb-lg-0 text-black text-decoration-none">
+                    Register
+                </a> </button>
 
 
 
