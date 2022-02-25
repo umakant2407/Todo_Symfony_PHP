@@ -32,10 +32,10 @@ class EventController extends  Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() ) {
             $this->eventManager = $this->get('app.event_manager');
-            $this->eventManager->createEvent($event);
+            $this->eventManager->createEvent($event,$this->getUser());
             return $this->redirectToRoute('displayEvent');
         }
-        return $this->render('Event/createEvent.html.twig',['form'=>$form->createView(),'path'=>$path, 'eventId'=>$event->getId() ]);
+        return $this->render('Event/createEvent.html.twig',['form'=>$form->createView(),'path'=>$path, 'eventId'=>$event->getId() ,'userName'=>$this->getUser()->getName()]);
 
     }
 
@@ -48,14 +48,16 @@ class EventController extends  Controller
 
         $this->eventManager = $this->get('app.event_manager');
         $path="updateAction";
-        $event =$this->eventManager->updateStatusHelper($eventId);
+        $event =$this->eventManager->getEventById($eventId);
         $form = $this->createForm(EventType::class,$event);
         $form->handleRequest($request);
         if ($form->isSubmitted() ) {
             $this->eventManager->updateStatus($form, $eventId);
             return $this->redirectToRoute('displayEvent');
         }
-        return $this->render('Event/updateEvent.html.twig',['form'=>$form->createView(),'path'=>$path,'eventId'=>$eventId]);
+        return $this->render('Event/updateEvent.html.twig',
+            ['form'=>$form->createView(),'path'=>$path,
+                'eventId'=>$eventId,'userName'=>$this->getUser()->getName()]);
     }
 
     /**
@@ -63,8 +65,9 @@ class EventController extends  Controller
      */
     public function displayEvent(){
         $this->eventManager = $this->container->get('app.event_manager');
-        $eventList = $this->eventManager->displayAll($_SESSION["userId"]);
-        return $this->render('Event/eventDisplay.html.twig',['eventList'=>$eventList]);
+        $eventList = $this->eventManager->displayAllByUser($this->getUser());
+        return $this->render('Event/eventDisplay.html.twig',
+            ['eventList'=>$eventList ,'userName'=>$this->getUser()->getName()]);
     }
 
 

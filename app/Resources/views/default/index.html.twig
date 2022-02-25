@@ -1,6 +1,18 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+{% block navbar %}
+<div class="text-end">
+    <button type="submit" formaction="/Register" class="btn btn-outline-light me-2"> <a href="/Register" class="d-flex align-items-center mb-1 mb-lg-0 text-white text-decoration-none">
+            Register
+        </a> </button>
+    <button type="submit" formaction="/login" class="btn btn-outline-light me-2"> <a href="/login" class="d-flex align-items-center mb-1 mb-lg-0 text-white text-decoration-none">
+            Login
+        </a> </button>
+
+<div>
+
+    {% endblock%}
     <div style="
     display: inline-block;
     position: fixed;
@@ -18,10 +30,6 @@
             <button type="submit"  class="btn btn-outline-dark me-2"> <a href="/Register" class="d-flex align-items-center mb-1 mb-lg-0 text-black text-decoration-none">
                     Register
                 </a> </button>
-
-
-
-
         </div>
     </div>
 {% endblock %}

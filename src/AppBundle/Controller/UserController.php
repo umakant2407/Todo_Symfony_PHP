@@ -32,14 +32,16 @@ class UserController extends Controller
                 ->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($password);
             $this->userManager = $this->container->get('app.user_manager');
-            $this->userManager->addUser($password,$user);
-            $authenticationUtils = $this->get('security.authentication_utils');
-            $error = $authenticationUtils->getLastAuthenticationError();
-            $lastUsername = $authenticationUtils->getLastUsername();
-            return $this->render('security/login.html.twig', array(
-                'last_username' => $lastUsername,
-                'error'         => $error,
-            ));
+            if(!$this->userManager->getUserByName($user->getName())) {
+                $this->userManager->addUser($password, $user);
+                $authenticationUtils = $this->get('security.authentication_utils');
+                $error = $authenticationUtils->getLastAuthenticationError();
+                $lastUsername = $authenticationUtils->getLastUsername();
+                return $this->redirectToRoute('displayEvent');
+            }else{
+                $this->addFlash('warning', 'This User Name is Already Registered');
+                return $this->redirectToRoute('signUp');
+            }
         }
         return $this->render('Registration/register.html.twig',['form'=>$form->createView(),'path'=>$path]);
     }
@@ -49,7 +51,6 @@ class UserController extends Controller
      * @Route("/logout", name="logout")
      */
     public function logout(){
-        session_unset();
-        session_destroy();
+        //
     }
 }

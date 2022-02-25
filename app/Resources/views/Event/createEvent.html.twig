@@ -14,8 +14,14 @@
 {#    {{ form_start(form) }}#}
 {#    {{ form_widget(form) }}#}
 {#    {{ form_end(form) }}#}
-
-
+    {% block navbar %}
+        <button type="submit" formaction="/Register" class="btn btn-outline-light me-2"> <a href="#" class="d-flex align-items-center mb-1 mb-lg-0 text-white text-decoration-none">
+                {{ userName }}
+            </a> </button>
+        <button type="submit" formaction="/logout" class="btn btn-outline-light me-2"> <a href="/logout" class="d-flex align-items-center mb-1 mb-lg-0 text-white text-decoration-none">
+                Logout
+            </a> </button>
+    {% endblock %}
         <div class="container align-middle">
             <h3>Create A New Event</h3>
             <form action="{{ url(path) }}" method="POST" {{ form_enctype(form) }}>

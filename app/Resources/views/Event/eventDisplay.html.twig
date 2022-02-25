@@ -1,7 +1,14 @@
 {% extends "base.html.twig" %}
 
 {% block body%}
-
+    {% block navbar %}
+        <button type="submit" formaction="/Register" class="btn btn-outline-light me-2"> <a href="#" class="d-flex align-items-center mb-1 mb-lg-0 text-white text-decoration-none">
+                {{ userName }}
+            </a> </button>
+        <button type="submit" formaction="/logout" class="btn btn-outline-light me-2"> <a href="/logout" class="d-flex align-items-center mb-1 mb-lg-0 text-white text-decoration-none">
+                Logout
+            </a> </button>
+    {% endblock %}
     <div class="container">
         <h3>List Of Events</h3>
         <table class="table">

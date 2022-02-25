@@ -14,9 +14,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="user")
  * @ORM\Entity
  * @UniqueEntity(
- *     fields={"email_id"},
- *     errorPath="email_id",
- *     message="This email_id is already in registred."
+ *     fields={"name"},
+ *     errorPath="name",
+ *     message="This name is already in registred."
  * )
  */
 
@@ -31,6 +31,10 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      */
     private $events;
 
+    /**
+     * @var array
+     */
+    private $roles;
 
 
     public function __construct()
@@ -51,7 +55,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     /**
      * @var string
      * @Assert\NotBlank
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255,unique=true)
      */
     private $name;
 
@@ -59,7 +63,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
      * @var string
      * @Assert\NotBlank
      * @Assert\Email
-     * @ORM\Column(name="email_id", type="string", length=255 ,unique=true)
+     * @ORM\Column(name="email_id", type="string", length=255 )
      */
     private $email_id ;
     /**
@@ -175,6 +179,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
     public function getRoles()
     {
         // TODO: Implement getRoles() method.
+        return array('ROLE_USER');
     }
 
     public function getSalt()
@@ -184,7 +189,7 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
 
     public function getUsername()
     {
-        // TODO: Implement getUsername() method.
+        return $this->name;
     }
 
     public function eraseCredentials()

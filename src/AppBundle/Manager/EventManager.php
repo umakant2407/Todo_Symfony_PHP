@@ -27,16 +27,15 @@ class EventManager
         $this->eventRepository = $this->em->getRepository(Event::class);
     }
 
-    public function createEvent(Event $event)
+    public function createEvent(Event $event,User $user)
     {
-        $user= $this->userRepository->findOneBy(array('id' => $_SESSION["userId"] ));
         $event->setUser($user);
         $this->em->persist($event);
         $this->em->flush();
     }
 
-    public function updateStatusHelper(int $eventId){
-        return $event = $this->eventRepository->findOneBy(array('id' => $eventId));
+    public function getEventById(int $eventId){
+        return $this->eventRepository->findOneBy(array('id' => $eventId));
     }
 
     public function updateStatus(Form $form,int $eventId){
@@ -51,9 +50,9 @@ class EventManager
         $this->em->flush();
     }
 
-    public function displayAll()
+    public function displayAllByUser(User $user)
     {
-        return $this->eventRepository->findBy(array('user' => $_SESSION["userId"]));
+        return $this->eventRepository->findBy(array('user' => $user->getId()));
 
     }
 }

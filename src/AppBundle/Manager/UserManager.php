@@ -35,8 +35,13 @@ class UserManager
     }
 
 
-    public function loginUser(string $email_id,string $password){
-        return $this->userRepository->findOneBy(array('email_id'=>$email_id));
+    public function getUserByName(string $name){
+        $user=$this->userRepository->findOneBy(array('name'=>$name));
+        If($user){
+            return true;
+        }else{
+            return false;
+        }
     }
 
 
