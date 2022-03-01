@@ -5,6 +5,7 @@ use AppBundle\Entity\Event;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
+
 class EventRepository extends ServiceEntityRepository
 {
 

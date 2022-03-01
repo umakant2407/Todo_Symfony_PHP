@@ -1,60 +1,75 @@
 <?php
 
 namespace AppBundle\Controller;
+use AppBundle\Entity\User;
+use AppBundle\Form\EventType;
+use AppBundle\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use AppBundle\Entity\Event;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Manager\EventManager;
 
 class EventController extends  Controller
 {
-    
-    /**
-     * Routing to get all Event
-     * @Route("/Event/", name="event_list", methods={"GET"})
-     */
-    public function index(): \Symfony\Component\HttpFoundation\Response
-    {
-        $event = $this->getDoctrine()->getRepository(Event::class)->findBy([], ['id' => 'DESC']);
-        return $this->render('index.html.twig', ['Event' => $event]);
+
+    private  $eventManager;
+
+    public function __construct(){
 
     }
 
     /**
-     * @Route("/Event/", name="create_event", methods={"POST"})
+     * @Route("/User/Event", name="create_event", methods={"GET|POST"})
      */
-    public function create(Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function create(Request $request)
     {
-        $title = trim($request->request->get('title'));
-        $description = trim($request->request->get('description'));
-        $status = trim($request->request->get('status'));
-        if (empty($title))
-            return $this->redirectToRoute('event_list');
-        $entityManager = $this->getDoctrine()->getManager();
-        $event = new Event();
-        $event->setTitle($title);
-        $event->setDescription($description);
-        $event->setStatus($status);
-        $entityManager->persist($event);
-        $entityManager->flush();
+        $path="create_event";
+        $event =new Event();
+        $form = $this->createForm(EventType::class,$event);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() ) {
+            $this->eventManager = $this->get('app.event_manager');
+            $this->eventManager->createEvent($event,$this->getUser());
+            $this->addFlash('success', 'New Event created Successfully');
+            return $this->redirectToRoute('displayEvent');
+        }
+        return $this->render('Event/createEvent.html.twig',['form'=>$form->createView(),'path'=>$path, 'eventId'=>$event->getId() ,'userName'=>$this->getUser()->getName()]);
 
-        return $this->redirectToRoute('event_list');
+    }
+
+
+    /**
+     * @Route("/User/Event/Update/{eventId}", name="updateAction", methods={"GET|POST"})
+     */
+    public function update(Request $request,int $eventId)
+    {
+        $this->eventManager = $this->get('app.event_manager');
+        $path="updateAction";
+        $event =$this->eventManager->getEventById($eventId);
+        $form = $this->createForm(EventType::class,$event);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() ) {
+            $this->eventManager->updateStatus($form, $eventId);
+            $this->addFlash('success', 'Event updated successfully');
+            return $this->redirectToRoute('displayEvent');
+        }
+        return $this->render('Event/updateEvent.html.twig',
+            ['form'=>$form->createView(),'path'=>$path,
+                'eventId'=>$eventId,'userName'=>$this->getUser()->getName()]);
     }
 
     /**
-     * @Route("/Event/change-status/{id}", name="change_status", methods={"PATCH"})
+     * @Route("/User/", name="displayEvent", methods={"GET"})
      */
-    public function changeStatus(Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
-    {
-        $event=new Event();
-        $id = trim($request->request->get('id'));
-        $entityManager = $this->getDoctrine()->getManager();
-        $event = $this->getDoctrine()->getRepository(Event::class)->find($id);
-
-        $event->setStatus( ! $event->getStatus());
-        $entityManager->flush();
-        return $this->redirectToRoute('event_list');
+    public function displayEvent(){
+        $this->eventManager = $this->container->get('app.event_manager');
+        $eventList = $this->eventManager->displayAllByUser($this->getUser());
+        return $this->render('Event/eventDisplay.html.twig',
+            ['eventList'=>$eventList ,'userName'=>$this->getUser()->getName()]);
     }
+
 
 }

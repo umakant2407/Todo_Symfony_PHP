@@ -1,0 +1,44 @@
+{% extends "base.html.twig" %}
+
+{% block body%}
+    {% block navbar %}
+        <button type="submit" formaction="/Register" class="btn btn-outline-light me-2"> <a href="#" class="d-flex align-items-center mb-1 mb-lg-0 text-white text-decoration-none">
+                {{ userName }}
+            </a> </button>
+        <button type="submit" formaction="/logout" class="btn btn-outline-light me-2"> <a href="/logout" class="d-flex align-items-center mb-1 mb-lg-0 text-white text-decoration-none">
+                Logout
+            </a> </button>
+    {% endblock %}
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="success">{{ flashMessage }}</div>
+    {% endfor %}
+    <div class="container">
+        <h3>List Of Events</h3>
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Description</th>
+                <th scope="col">Status</th>
+                <th scope="col">Link To Update</th>
+            </tr>
+            </thead>
+            {% for event in eventList %}
+            <tbody>
+                <th scope="col">{{ event.title }}</th>
+                <th scope="col">{{ event.description }}</th>
+                <th scope="col">{{ event.status }}</th>
+                <th scope="col"><a href="{{ path('updateAction' ,{'eventId': event.id }) }}">Update</a></th>
+            </tbody>
+            {% endfor %}
+        </table>
+    </div>
+    <br>
+    <div class="container">
+
+    <h4><a href="{{ path('create_event' )}}">Create New Event</a></h4>
+
+    </div>
+    {% block javascripts %}
+    {% endblock %}
+{% endblock %}

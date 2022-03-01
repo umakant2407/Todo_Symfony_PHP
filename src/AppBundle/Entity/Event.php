@@ -1,34 +1,35 @@
 <?php
 
 namespace AppBundle\Entity;
-namespace AppBundle\Entity\User;
 /**
  * Event
  *
  * @ORM\Table(name="event")
- * @ORM\Entity(repositoryClass="AppBundle/Repository/EventRepository")
+ * @ORM\Entity
  */
 
-use AppBundle\Entity\Event\User;
+use AppBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 class Event
 {
 
 
     /**
      * @var User
-     *
-     * @ORM\Column(name="user", type="User")
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="events")
+     * @Assert\NotBlank
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="events")
+     * @ORM\JoinColumn(name="User_id", referencedColumnName="id")
      */
     private $user;
 
-    public function getUser(): User
+    public function getUser()
     {
         return $this->user;
     }
 
-    public function setUser(User $user): Event
+    public function setUser(User $user)
     {
         $this->user = $user;
 
@@ -46,7 +47,7 @@ class Event
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank
      * @ORM\Column(name="title", type="string", length=255)
      */
     private $title;
@@ -59,16 +60,16 @@ class Event
     private $description;
 
     /**
-     * @var boolean
+     * @var string
      *
-     * @ORM\Column(name="status", type="boolean")
+     * @ORM\Column(name="status", type="string")
      */
     private $status;
 
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }
@@ -84,7 +85,7 @@ class Event
     /**
      * @return string
      */
-    public function getTitle(): string
+    public function getTitle()
     {
         return $this->title;
     }
@@ -100,7 +101,7 @@ class Event
     /**
      * @return string
      */
-    public function getDescription(): string
+    public function getDescription()
     {
         return $this->description;
     }
@@ -114,17 +115,17 @@ class Event
     }
 
     /**
-     * @return bool
+     * @return string
      */
-    public function isStatus(): bool
+    public function isStatus()
     {
         return $this->status;
     }
 
     /**
-     * @param bool $status
+     * @param string $status
      */
-    public function setStatus(bool $status)
+    public function setStatus(string $status)
     {
         $this->status = $status;
     }

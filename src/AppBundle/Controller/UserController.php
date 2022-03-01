@@ -1,50 +1,56 @@
 <?php
 
 namespace AppBundle\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\User;
+use AppBundle\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class UserController extends Controller
 {
 
 
+    private $userManager;
+
     /**
-     * @Route("/", name="create_user", methods={"POST"})
+     * @Route("/Register", name="signUp", methods={"GET|POST"})
+     * @param Request $request
+     * @return Response
      */
     public function signUp(Request $request)
     {
-        $name = trim($request->request->get('name'));
-        $email_id = trim($request->request->get('email_id'));
-        $password = trim($request->request->get('password'));
-        $mobile_number = trim($request->request->get('mobile_number'));
-        $entityManager = $this->getDoctrine()->getManager();
+        $path="signUp";
         $user = new User();
-        $user->setEmailId($email_id);
-        $user->setPassword($password);
-        $user->setName($name);
-        $user->setMobileNumber($mobile_number);
-        $entityManager->persist($user);
-        $entityManager->flush();
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
+        if ($form->isSubmitted()  ) {
+            $password = $this->get('security.password_encoder')
+                ->encodePassword($user, $user->getPlainPassword());
+            $user->setPassword($password);
+            $this->userManager = $this->get('app.user_manager');
+            if(!$this->userManager->getUserByName($user->getName())) {
+                $this->userManager->addUser($password, $user);
+                $authenticationUtils = $this->get('security.authentication_utils');
+                $error = $authenticationUtils->getLastAuthenticationError();
+                $lastUsername = $authenticationUtils->getLastUsername();
+                return $this->redirectToRoute('displayEvent');
+            }else{
+                $this->addFlash('warning', 'This User Name is Already Registered');
+                return $this->redirectToRoute('signUp');
+            }
+        }
+        return $this->render('Registration/register.html.twig',['form'=>$form->createView(),'path'=>$path]);
     }
 
 
     /**
-     * @Route("/{email_id}{passawrd}", name="login_user", methods={"GET"})
+     * @Route("/logout", name="logout")
      */
-    public function login(Request $request)
-    {
-        $user= new User();
-        $email_id = trim($request->request->get('email_id'));
-        $password = trim($request->request->get('password'));
-        $entityManager = $this->getDoctrine()->getManager();
-        $user = $this->getDoctrine()->getRepository(User::class)->find($email_id);
-        $originalPassword=$user->getPassword();
-        if($password==$originalPassword){
-            return $user->getEvents();
-        }else{
-            return "Email Id or Password is incorrect";
-        }
+    public function logout(){
+        //
     }
 }

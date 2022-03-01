@@ -1,0 +1,47 @@
+
+{% extends "base.html.twig" %}
+
+{% block body%}
+
+    {% block navbar %}
+        <button type="submit" formaction="/Register" class="btn btn-outline-light me-2"> <a href="#" class="d-flex align-items-center mb-1 mb-lg-0 text-white text-decoration-none">
+                {{ userName }}
+            </a> </button>
+        <button type="submit" formaction="/logout" class="btn btn-outline-light me-2"> <a href="/logout" class="d-flex align-items-center mb-1 mb-lg-0 text-white text-decoration-none">
+                Logout
+            </a> </button>
+    {% endblock %}
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="success">{{ flashMessage }}</div>
+    {% endfor %}
+    <div class="container align-middle" margin:centre>
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col"><h3>Upadte Event</h3></th>
+            </tr>
+            </thead>
+            <form action="{{ url(path,{ 'eventId': eventId }) }}" method="POST" {{ form_enctype(form) }}>
+                <tbody>
+                <th scope="col"><div class="mr-auto p-2">  {{ form_row(form.title,      { 'label': 'Title Of Event::-' }) }} </div></th>
+                </tbody>
+                <tbody>
+                <th scope="col"><div class="mr-auto p-2"> {{ form_row(form.description, { 'label': 'EventDescription:-' }) }} </div></th>
+                </tbody>
+                <tbody>
+                <th scope="col"><div class="mr-auto p-2"> {{ form_row(form.status,      { 'label': 'Status Of Event:-' }) }} </div></th>
+                </tbody>
+                <tbody>
+                <th scope="col"><div class="mr-auto p-2"><button class="btn btn-lg btn-primary" type="submit">
+                            Update
+                        </button> </div></th>
+                </tbody>
+            </form>
+        </table>
+    </div>
+
+
+
+
+    {{ form_end(form) }}
+{% endblock %}

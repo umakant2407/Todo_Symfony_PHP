@@ -1,68 +1,49 @@
-Symfony Standard Edition
-========================
+ToDoList
+========
 
-Welcome to the Symfony Standard Edition - a fully-functional Symfony2
-application that you can use as the skeleton for your new applications.
+Welcome on the ToDoList GitHub. A Symfony 2.8 project.
 
-For details on how to download and get started with Symfony, see the
-[Installation][1] chapter of the Symfony Documentation.
+Prerequisite
+------------
 
-What's inside?
---------------
+- PHP 7
+- MySQL
+- Composer for Symfony 2.8 and bundles installations
 
-The Symfony Standard Edition is configured with the following defaults:
+Add-ons
+-------
 
-  * An AppBundle you can use to start coding;
+- Bootstrap
 
-  * Twig as the only configured template engine;
+ORM
+---
 
-  * Doctrine ORM/DBAL;
+- Doctrine
 
-  * Swiftmailer;
+Bundles
+-------
 
-  * Annotations enabled for everything.
+- Twig
+- PhpUnit
 
-It comes pre-configured with the following bundles:
+Installation
+------------
 
-  * **FrameworkBundle** - The core Symfony framework bundle
+1. Symfony 2.8 and bundles installations Open bash in folder and type:
 
-  * [**SensioFrameworkExtraBundle**][6] - Adds several enhancements, including
-    template and routing annotation capability
+    composer install
+    
+2. Database creation Type:
 
-  * [**DoctrineBundle**][7] - Adds support for the Doctrine ORM
+    php app/console doctrine:database:create
+    
+   Then
+   
+    php app/console doctrine:schema:update --force
+    
+3.Start Symfony Server
 
-  * [**TwigBundle**][8] - Adds support for the Twig templating engine
-
-  * [**SecurityBundle**][9] - Adds security by integrating Symfony's security
-    component
-
-  * [**SwiftmailerBundle**][10] - Adds support for Swiftmailer, a library for
-    sending emails
-
-  * [**MonologBundle**][11] - Adds support for Monolog, a logging library
-
-  * **WebProfilerBundle** (in dev/test env) - Adds profiling functionality and
-    the web debug toolbar
-
-  * **SensioDistributionBundle** (in dev/test env) - Adds functionality for
-    configuring and working with Symfony distributions
-
-  * [**SensioGeneratorBundle**][13] (in dev/test env) - Adds code generation
-    capabilities
-
-  * **DebugBundle** (in dev/test env) - Adds Debug and VarDumper component
-    integration
-
-All libraries and bundles included in the Symfony Standard Edition are
-released under the MIT or BSD license.
-
-Enjoy!
-
-[1]:  https://symfony.com/doc/2.8/book/installation.html
-[6]:  https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/index.html
-[7]:  https://symfony.com/doc/2.8/book/doctrine.html
-[8]:  https://symfony.com/doc/2.8/book/templating.html
-[9]:  https://symfony.com/doc/2.8/book/security.html
-[10]: https://symfony.com/doc/2.8/cookbook/email.html
-[11]: https://symfony.com/doc/2.8/cookbook/logging/monolog.html
-[13]: https://symfony.com/doc/2.8/bundles/SensioGeneratorBundle/index.html
+    php app/console server:run
+    
+And enjoy :)
+   

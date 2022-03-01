@@ -1,0 +1,34 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    {% block navbar %}
+        <div class="text-end">
+            <button type="submit" formaction="/Register" class="btn btn-outline-light me-2"><a href="/Register"
+                                                                                               class="d-flex align-items-center mb-1 mb-lg-0 text-white text-decoration-none">
+                    Register
+                </a></button>
+            <button type="submit" formaction="/login" class="btn btn-outline-light me-2"><a href="/login"
+                                                                                            class="d-flex align-items-center mb-1 mb-lg-0 text-white text-decoration-none">
+                    Login
+                </a></button>
+        </div>
+    {% endblock %}
+    {% for flashMessage in app.session.flashbag.get('warning') %}
+        <div class="warning">{{ flashMessage }}</div>
+    {% endfor %}
+    <div class="container align-middle">
+        <h4>Create New User</h4>
+        <form action="{{ url(path) }}" method="POST" {{ form_enctype(form) }}>
+            {{ form_widget(form) }}
+            <button class="btn btn-lg btn-primary" type="submit">
+                Create
+            </button>
+        </form>
+        {{ form_end(form) }}
+    </div>
+
+
+
+{% endblock %}
+
+

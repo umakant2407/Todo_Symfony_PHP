@@ -9,13 +9,14 @@
 >
     <php>
         <ini name="error_reporting" value="-1" />
+        <server name="KERNEL_CLASS" value="AppKernel" />
     </php>
 
     <testsuites>
         <testsuite name="Project Test Suite">
-            <directory>../src/*/*Bundle/Tests</directory>
-            <directory>../src/*/Bundle/*Bundle/Tests</directory>
-            <directory>../src/*Bundle/Tests</directory>
+<!--            <directory>../src/*/*Bundle/Tests</directory>-->
+<!--            <directory>../src/*/Bundle/*Bundle/Tests</directory>-->
+            <directory>../src/AppBundle/Tests</directory>
         </testsuite>
     </testsuites>
 
@@ -24,6 +25,10 @@
         <server name="KERNEL_DIR" value="/path/to/your/app/" />
     </php>
     -->
+
+    <listeners>
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
+    </listeners>
 
     <filter>
         <whitelist>

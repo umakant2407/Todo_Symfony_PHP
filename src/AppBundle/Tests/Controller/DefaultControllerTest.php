@@ -3,6 +3,8 @@
 namespace AppBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class DefaultControllerTest extends WebTestCase
 {
@@ -13,6 +15,8 @@ class DefaultControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/');
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        $this->assertContains('Welcome to Symfony', $crawler->filter('#container h1')->text());
+        $this->assertSame(1, $crawler->filter('html:contains("TODO APP")')->count());
+
     }
+
 }

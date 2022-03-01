@@ -1,0 +1,36 @@
+
+{% extends "base.html.twig" %}
+
+{% block body %}
+{% block navbar %}
+<div class="text-end">
+    <button type="submit" formaction="/Register" class="btn btn-outline-light me-2"> <a href="/Register" class="d-flex align-items-center mb-1 mb-lg-0 text-white text-decoration-none">
+            Register
+        </a> </button>
+    <button type="submit" formaction="/login" class="btn btn-outline-light me-2"> <a href="/login" class="d-flex align-items-center mb-1 mb-lg-0 text-white text-decoration-none">
+            Login
+        </a> </button>
+
+</div>
+{% endblock %}
+    <div>
+    <form action="/login" method="POST">
+        {% if error %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+
+
+        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="_username" class="form-control required autofocus" value="{{ last_username }}" />
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="_password" class="form-control required"/>
+
+
+        <button class="btn btn-lg btn-primary" type="submit">
+            Sign in
+        </button>
+    </form>
+</div>
+{% endblock %}

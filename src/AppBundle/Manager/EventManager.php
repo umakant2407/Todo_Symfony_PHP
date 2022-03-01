@@ -1,14 +1,58 @@
 <?php
 
 namespace AppBundle\Manager;
+use AppBundle\Entity\User;
+use Doctrine\Common\Persistence\ManagerRegistry as Doctrine;
+use AppBundle\Entity\Event;
+use Symfony\Component\Form\Form;
 
-use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Event Manager
+ */
 class EventManager
 {
-
-    public function createEvent(Request $request){
-
+    private $em ;
+    private $doctrine;
+    private $eventRepository;
+    private $userRepository;
+    /**
+     * Constructor
+     * @param Doctrine         $doctrine        - Doctrine
+     */
+    public function __construct(Doctrine $doctrine){
+        $this->doctrine = $doctrine;
+        $this->em = $this->doctrine->getManager();
+        $this->userRepository = $this->em->getRepository(User::class);
+        $this->eventRepository = $this->em->getRepository(Event::class);
     }
 
+    public function createEvent(Event $event,User $user)
+    {
+        $event->setUser($user);
+        $this->em->persist($event);
+        $this->em->flush();
+    }
+
+    public function getEventById(int $eventId){
+        return $this->eventRepository->findOneBy(array('id' => $eventId));
+    }
+
+    public function updateStatus(Form $form,int $eventId){
+        $title=$form->get('title')->getData();
+        $description=$form->get('description')->getData();
+        $status=$form->get('status')->getData();
+        $event = $this->eventRepository->findOneBy(array('id' => $eventId));
+        $event->setStatus($status);
+        $event->setTitle($title);
+        $event->setDescription($description);
+        $this->em->persist($event);
+        $this->em->flush();
+    }
+
+    public function displayAllByUser(User $user)
+    {
+        return $this->eventRepository->findBy(array('user' => $user->getId()));
+
+    }
 }

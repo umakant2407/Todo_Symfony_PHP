@@ -1,0 +1,28 @@
+
+{% extends "base.html.twig" %}
+
+{% block body%}
+
+    {% block navbar %}
+        <button type="submit" formaction="/Register" class="btn btn-outline-light me-2"> <a href="#" class="d-flex align-items-center mb-1 mb-lg-0 text-white text-decoration-none">
+                {{ userName }}
+            </a> </button>
+        <button type="submit" formaction="/logout" class="btn btn-outline-light me-2"> <a href="/logout" class="d-flex align-items-center mb-1 mb-lg-0 text-white text-decoration-none">
+                Logout
+            </a> </button>
+    {% endblock %}
+        <div class="container align-middle">
+            <h3>Create A New Event</h3>
+            <form action="{{ url(path) }}" method="POST" {{ form_enctype(form) }}>
+                <div class="mr-auto p-2">  {{ form_row(form.title,      { 'label': 'Title Of Event:-' }) }} </div>
+                <div class="mr-auto p-2"> {{ form_row(form.description, { 'label': 'EventDescription:-' }) }} </div>
+                <div class="mr-auto p-2"> {{ form_row(form.status,      { 'label': 'Status Of Event:-' }) }} </div>
+{#                <div class="mr-auto p-2"><input type="Submit" /> </div>#}
+                <button class="btn btn-lg btn-primary" type="submit">
+                    Create
+                </button>
+            </form>
+        </div>
+
+{{ form_end(form) }}
+{% endblock %}
