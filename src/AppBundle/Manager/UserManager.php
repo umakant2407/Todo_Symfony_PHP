@@ -15,8 +15,9 @@ class UserManager
 
     private $em ;
     private $doctrine;
-    private $eventRepository;
     private $userRepository;
+
+
     /**
      * Constructor
      * @param Doctrine         $doctrine        - Doctrine
@@ -25,7 +26,6 @@ class UserManager
         $this->doctrine = $doctrine;
         $this->em = $this->doctrine->getManager();
         $this->userRepository = $this->em->getRepository(User::class);
-        $this->eventRepository = $this->em->getRepository(Event::class);
     }
 
     public function addUser( string $password,User $user){
@@ -35,7 +35,8 @@ class UserManager
     }
 
 
-    public function getUserByName(string $name){
+    public function getUserByName(string $name): bool
+    {
         $user=$this->userRepository->findOneBy(array('name'=>$name));
         If($user){
             return true;

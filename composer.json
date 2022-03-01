@@ -17,11 +17,11 @@
         "sensio/distribution-bundle": "~3.0.36",
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "~2.0",
-        "ext-http": "*"
+        "phpunit/phpunit": "^5.5"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",
-        "symfony/phpunit-bridge": "~2.7"
+        "symfony/phpunit-bridge": "^5.2"
     },
     "scripts": {
         "post-install-cmd": [

@@ -9,6 +9,9 @@
                 Logout
             </a> </button>
     {% endblock %}
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="success">{{ flashMessage }}</div>
+    {% endfor %}
     <div class="container">
         <h3>List Of Events</h3>
         <table class="table">

@@ -31,7 +31,7 @@ class UserController extends Controller
             $password = $this->get('security.password_encoder')
                 ->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($password);
-            $this->userManager = $this->container->get('app.user_manager');
+            $this->userManager = $this->get('app.user_manager');
             if(!$this->userManager->getUserByName($user->getName())) {
                 $this->userManager->addUser($password, $user);
                 $authenticationUtils = $this->get('security.authentication_utils');

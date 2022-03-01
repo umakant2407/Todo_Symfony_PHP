@@ -33,6 +33,7 @@ class EventController extends  Controller
         if ($form->isSubmitted() ) {
             $this->eventManager = $this->get('app.event_manager');
             $this->eventManager->createEvent($event,$this->getUser());
+            $this->addFlash('success', 'New Event created Successfully');
             return $this->redirectToRoute('displayEvent');
         }
         return $this->render('Event/createEvent.html.twig',['form'=>$form->createView(),'path'=>$path, 'eventId'=>$event->getId() ,'userName'=>$this->getUser()->getName()]);
@@ -45,7 +46,6 @@ class EventController extends  Controller
      */
     public function update(Request $request,int $eventId)
     {
-
         $this->eventManager = $this->get('app.event_manager');
         $path="updateAction";
         $event =$this->eventManager->getEventById($eventId);
@@ -53,6 +53,7 @@ class EventController extends  Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() ) {
             $this->eventManager->updateStatus($form, $eventId);
+            $this->addFlash('success', 'Event updated successfully');
             return $this->redirectToRoute('displayEvent');
         }
         return $this->render('Event/updateEvent.html.twig',
